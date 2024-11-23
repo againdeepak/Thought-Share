@@ -1,0 +1,124 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getPostHook } from "../../hooks/postHook";
+import { editPostHook } from "../../hooks/postHook";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from "axios";
+export const EditPost: React.FC = () => {
+    const [photo, setPhoto] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [location, setLocation] = useState<string>("");
+    const { postId } = useParams();
+    const navigate = useNavigate();
+    // First fetch the previous data based on PostId
+    const getPostData = async () => {
+        const postData = await getPostHook(postId as string);
+        setPhoto(postData?.photo);
+        setDescription(postData?.description);
+        setLocation(postData?.location);
+    }
+    const editPostHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            const data = await editPostHook(postId as string, { photo, description, location });
+            toast.success(data.message);
+            navigate('/user-posts');
+        } catch (err) {
+            toast.error(err as string);
+            console.log("Error", err);
+        }
+    }
+
+    useEffect(() => {
+        getPostData();
+        // eslint-disable-next-line
+    }, [])
+
+    // First delete the Image stored on cloudinary... and Then upload this...
+    const uploadImage = async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "ml_default"); // Replace with your Cloudinary preset
+        formData.append("cloud_name", "dxwcmq53m"); // Replace with your Cloudinary cloud name
+
+        try {
+            const response = await axios.post("https://api.cloudinary.com/v1_1/dxwcmq53m/image/upload", formData);
+            return response.data.url; // Get the image URL from Cloudinary response
+        } catch (error) {
+            console.error("Error uploading image to Cloudinary:", error);
+            toast.error("Failed to upload image.");
+            return null;
+        }
+    };
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const imageUrl = await uploadImage(file);
+            if (imageUrl) {
+                setPhoto(imageUrl); // Set the Cloudinary image URL in state
+            }
+        }
+    };
+    return (
+        <form onSubmit={editPostHandler} className="container mt-4 p-4 rounded text-white">
+            <h3 className="mb-4 text-center">Edit Post</h3>
+
+
+            <div className="mb-3 d-flex justify-content-center">
+                <img src={photo} alt="postPic" width={"100px"} className="border radius-sm" />
+            </div>
+
+            <div className="mb-3 row d-flex justify-content-center text-sm-end">
+                <label htmlFor="photo" className="col-sm-4 col-form-label">Update photo:</label>
+                <div className="col-sm-8">
+                    <input
+                        type="file"
+                        id="photo"
+                        name="photo"
+                        className="form-control w-50"
+                        onChange={handleFileChange}
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="mb-3 row align-items-center">
+                <label htmlFor="desc" className="col-sm-4 col-form-label text-sm-end">Description:</label>
+                <div className="col-sm-8">
+                    <textarea
+                        id="desc"
+                        name="desc"
+                        rows={4}
+                        placeholder="About a post"
+                        className="form-control w-50"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="mb-3 row align-items-center">
+                <label htmlFor="location" className="col-sm-4 col-form-label text-sm-end">Location:</label>
+                <div className="col-sm-8">
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="City, State"
+                        className="form-control w-50"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
+                <button type="submit" className="btn btn-primary px-5">Update post</button>
+            </div>
+        </form>
+    )
+}
