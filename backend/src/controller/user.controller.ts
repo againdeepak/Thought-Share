@@ -132,7 +132,6 @@ export const updateUserProfilePic = async (req: UserProfilePicRequest, res: Resp
 
     try {
         const { id: userId } = req.params;
-        console.log("from backend side: ",req.body.photo);
         const { photo } = req.body;
         const response = await userModel.findByIdAndUpdate(userId, {userPic:photo},{new:true});
         return res.status(200).json({message:"Updated profile picture",response});

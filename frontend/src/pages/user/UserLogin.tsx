@@ -19,7 +19,6 @@ export const UserLogin: React.FC = () => {
        
         try{
             const data = await userLoginHook({ email, password});
-            console.log(data);
             setAuthUser(true);
             navigate('/')
             if(data){
@@ -53,7 +52,7 @@ export const UserLogin: React.FC = () => {
           <label htmlFor="password" className="col-sm-4 col-form-label text-sm-end">Password:</label>
           <div className="col-sm-8">
             <input
-              type="text"
+              type="password"
               id="password"
               name="password"
               placeholder="Enter a strong password"
@@ -66,8 +65,8 @@ export const UserLogin: React.FC = () => {
         </div>
       
         <div className="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
-          <button type="submit" className="btn btn-primary ">Login</button>
-          <Link className="haveAccount"  to='/signup'>Already Have an account</Link>
+          <button type="submit" className="btn btn-light">Login</button>
+          <Link className="haveAccount"  to='/signup'>Don't have an account</Link>
         </div>
       </form>
       

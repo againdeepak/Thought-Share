@@ -16,15 +16,21 @@ export const UserProfile: React.FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [photo, setPhoto] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [picLoading, setPicLoading] = useState<boolean>(false);
   const [uploadBtn, setUploadBtn] = useState<boolean>(false);
-  const [editProfilePic, setEditProfilePic]  = useState<boolean>(false);
+  const [editProfilePic, setEditProfilePic] = useState<boolean>(false);
 
   let checkUserPic = "https://res.cloudinary.com/dxwcmq53m/image/upload/v1731397366/UploadPic_uhmgsf.png";
   const userInfoHandler = async () => {
-    setLoading(true);
-    const response = await userInfoHook();
-    setUserInfo(response);
-    setLoading(false);
+
+    try {
+      setLoading(true);
+      const response = await userInfoHook();
+      setUserInfo(response);
+      setLoading(false);
+    } catch (err) {
+      toast.error(err as string);
+    }
   };
 
   useEffect(() => {
@@ -41,7 +47,7 @@ export const UserProfile: React.FC = () => {
 
     try {
       const response = await axios.post("https://api.cloudinary.com/v1_1/dxwcmq53m/image/upload", formData);
-      setLoading(false);
+      setPicLoading(false);
       return response.data.url; // Get the image URL from Cloudinary response
     } catch (error) {
       console.error("Error uploading image to Cloudinary:", error);
@@ -51,14 +57,17 @@ export const UserProfile: React.FC = () => {
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoading(true);
+    setPicLoading(true);
+
     // Delete the existing photo of userProfile... If you are updating it again
     // Because we don't want to store the image on cloud
-    if(editProfilePic){ // If this is true, delete first 
-      console.log(userInfo?.userPic,"Needs to be deleted")
-      // let urlImage = userInfo?.userPic;
-      // urlImage = urlImage?.split('/');
-      // const imageToDelete = urlImage[urlImage?.length-2];
+    if (editProfilePic) { // If this is true, delete first 
+      if (userInfo?.userPic) {
+        var urlImage = userInfo?.userPic.split('/');
+        const publicId = urlImage[urlImage?.length - 1].split('.')[0];
+        // Delete image with public id...
+        await axiosInstance.post(`/cloud/image/delete`, { publicId }, { withCredentials: true });
+      }
     }
     const file = e.target.files?.[0];
     if (file) {
@@ -71,19 +80,17 @@ export const UserProfile: React.FC = () => {
   const updateUserPicHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userId = userInfo?._id;
-    const result = await axiosInstance.put(`/user/profile/${userId}/update`, { photo }, { withCredentials: true });
-    console.log(result)
+    await axiosInstance.put(`/user/profile/${userId}/update`, { photo }, { withCredentials: true });
     // Fetch Updated image...
     userInfoHandler();
-    console.log("new photo: url: ", photo);
     setUploadBtn(false);
     setEditProfilePic(false);
   }
-  const editProfileImageHandler = () =>{
+  const editProfileImageHandler = () => {
     setEditProfilePic(true);
   }
   return (
-    <div className='user-information bg-dark'>
+    <div className='user-information'>
       {(userInfo && !loading) ? (
         <>
           {
@@ -92,11 +99,15 @@ export const UserProfile: React.FC = () => {
               <div className="user-profile-pic mb-5" >
                 <form onSubmit={updateUserPicHandler}>
                   <label htmlFor="file-input">
-                    <img
-                      src={ uploadBtn ? photo : checkUserPic}
-                      alt="user_pic"
-                      className="profile-image"
-                    />
+                    <div className='user-profile-pic' >
+                      {
+                        !picLoading ? (<img
+                          src={uploadBtn ? photo : checkUserPic}
+                          alt="user_pic"
+                          className="profile-image"
+                        />) : (<img src='Loading.gif' alt='userPicLoading' />)
+                      }
+                    </div>
                   </label>
                   <input
                     id="file-input"
@@ -117,6 +128,7 @@ export const UserProfile: React.FC = () => {
                 <div className='user-profile-pic' >
                   <img src={userInfo.userPic} alt='user_pic' />
                 </div>
+
                 <div>
                   <button className='btn btn-outline-light mt-3' onClick={editProfileImageHandler}>Edit Image</button>
                 </div>

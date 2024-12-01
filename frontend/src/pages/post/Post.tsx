@@ -8,12 +8,15 @@ import toast from 'react-hot-toast';
 import { postLikeHook, postUnLikeHook, likesOfPostHook, likeStatusHook } from '../../hooks/likeHook';
 import { CreateComment } from '../comment/CreateComment';
 
+interface postByUser{
+  userName:string;
+  userPic: string;
+}
 interface PostType {
   _id: string;
   photo: string;
   location: string;
-  postBy: string;
-  currUserPic:string;
+  postBy: postByUser;
   description: string;
   createdAt: string;
   updatedAt: string;
@@ -130,8 +133,13 @@ export const Post: React.FC<PostProps> = ({ item, userPost }) => {
   }, [])
 
   const likeStatusHandler = async () => {
-    const response = await likeStatusHook(item._id);
-    setLikeStatus(response);
+    
+    try{
+      const response = await likeStatusHook(item._id);
+      setLikeStatus(response);
+    }catch(err){
+      toast.error(err as string);
+    }
   }
 
   if (authUser) { // This status only showed liked as red... when user is loggedin...
@@ -158,11 +166,11 @@ export const Post: React.FC<PostProps> = ({ item, userPost }) => {
 
         <div className='leftSideUserProfile'>
           <div className='userImage'>
-            <img src={item.currUserPic} alt='user_Profile' />
+            <img src={item.postBy.userPic} alt='user_Profile' />
           </div>
 
           <div className='userInformation'>
-            <span><strong>{item.postBy} </strong></span>
+            <span><strong>{item.postBy.userName} </strong></span>
             <span>{item.location}</span>
           </div>
         </div>
@@ -190,7 +198,7 @@ export const Post: React.FC<PostProps> = ({ item, userPost }) => {
       <div className='createAndUpdate description'>
         {
           checkEdit ? (
-            <p><strong>Edited on</strong>: {convertToIST(item.updatedAt)}</p>
+            <p><strong>Updated on</strong>: {convertToIST(item.updatedAt)}</p>
           ) : (
             <p><strong>Posted on</strong>: {convertToIST(item.createdAt)}</p>
           )
@@ -215,9 +223,8 @@ export const Post: React.FC<PostProps> = ({ item, userPost }) => {
           <hr />
           <CreateComment
            postId={item._id}
-           postBy={item.postBy}
+           postBy={item.postBy.userName}
            commentsOfPostFun={commentsOfPostFun}
-          
             comments={comments} />
         </div>
       }

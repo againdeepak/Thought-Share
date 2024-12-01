@@ -6,8 +6,7 @@ interface IPost extends Document {
     photo: string;
     description: string;
     location: string;
-    postBy: string;
-    currUserPic:string;
+    postBy:mongoose.Types.ObjectId;
     likes: mongoose.Types.ObjectId[];
     comments: mongoose.Types.ObjectId[];
 }
@@ -24,12 +23,9 @@ const postSchema = new Schema<IPost>({
         type: String,
         required: true,
     },
-    postBy: {
-        type: String,
-        required: true,
-    },
-    currUserPic:{
-        type:String,
+    postBy: { //Referring to the currentUser
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"userModel",
         required:true,
     },
     likes: [

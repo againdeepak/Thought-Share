@@ -4,6 +4,7 @@ import likeModel from "../models/likeModel";
 import commentModel from "../models/commentModel";
 import userModel from "../models/userModel";
 import { Document } from "mongoose";
+import { populate } from "dotenv";
 interface createPostRequest extends Request {
     userId?: string;
     body: {
@@ -11,7 +12,6 @@ interface createPostRequest extends Request {
         description: string;
         location: string;
         postBy: string;
-        currUserPic:string;
     }
 }
 export const createPost = async (req: createPostRequest, res: Response): Promise<any> => {
@@ -26,11 +26,10 @@ export const createPost = async (req: createPostRequest, res: Response): Promise
             photo,
             description,
             location,
-            postBy: currUser?.userName,
-            // add the image of current user
-            currUserPic:currUser?.userPic
+            postBy:currUser, // Refer to the current user for finding the Name and Profile pic..
         })
         const newPost = await post.save();
+        console.log(newPost);
         // Push inside the current User's posts array...
         await userModel.findByIdAndUpdate(
             { _id: req.userId },
@@ -46,7 +45,10 @@ export const createPost = async (req: createPostRequest, res: Response): Promise
 
 export const getAllPosts = async (req: Request, res: Response): Promise<any> => {
     try {
-        const allPosts = await postModel.find().sort({ createdAt: -1 });
+        const allPosts = await postModel.find().sort({ createdAt: -1 }).populate({
+            path:"postBy",
+            select:"userName userPic"
+        });
         return res.status(200).json({ allPosts });
     } catch (err) {
         console.error("Error in getAllPost controller", err);
@@ -63,7 +65,7 @@ interface postModel {
 }
 
 // Define the User structure, where posts are populated as PostModel objects
-interface User extends Document {
+export interface User extends Document {
     posts: postModel[] // Array of populated post objects
 }
 
@@ -76,14 +78,21 @@ export const userPosts = async (req: UserPostsRequest, res: Response): Promise<a
     try {
         // Fetch user by ID and populate posts with PostModel type
         const userPosts = await userModel
-            .findById(req.userId).select("-_id posts")
-            .populate<{ posts: postModel[] }>("posts");
-
+            .findById(req.userId).select("-_id userName userPic")
+            .populate<{ posts: postModel[] }>({
+                path:"posts",
+                populate:{
+                   path:"postBy",
+                   select:"userName userPic" 
+                }
+            }).lean().exec();
         // If user is not found
         if (!userPosts) {
-            return res.status(404).json({ error: "User not found" });
+            return res.status(404).json({ error: "User has no posts" });
         }
-
+        for (const key in userPosts) {
+            console.log("value at 94",key);
+        }
         // Return the populated posts
         return res.status(200).json({ userPosts });
     } catch (err) {

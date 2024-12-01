@@ -1,6 +1,7 @@
 import express from 'express';
 import dbConn from './config/dbConn'; 
 import userRoute from './routes/user.route';
+import cloudinaryRoute from './routes/cloudinary.route';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -16,6 +17,8 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/user',userRoute);
+app.use('/cloud',cloudinaryRoute);
+
 app.listen(PORT,()=>{
     console.log("Listening to poort no",PORT);
     dbConn();

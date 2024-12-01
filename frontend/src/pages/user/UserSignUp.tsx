@@ -69,7 +69,7 @@ export const UserSignUp: React.FC = () => {
         <label htmlFor="password" className="col-sm-4 col-form-label text-sm-end">Password:</label>
         <div className="col-sm-8">
           <input
-            type="text"
+            type="password"
             id="password"
             name="password"
             placeholder="Enter a strong password"
@@ -82,7 +82,7 @@ export const UserSignUp: React.FC = () => {
       </div>
 
       <div className="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
-        <button type="submit" className="btn btn-primary ">Sign Up</button>
+        <button type="submit" className="btn btn-light ">Sign up</button>
         <Link className="haveAccount" to='/login'>Already Have an account</Link>
       </div>
     </form>

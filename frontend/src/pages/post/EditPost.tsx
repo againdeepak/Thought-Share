@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import { getPostHook } from "../../hooks/postHook";
 import { editPostHook } from "../../hooks/postHook";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../lib/axiosInstance";
 import toast from "react-hot-toast";
 import axios from "axios";
 export const EditPost: React.FC = () => {
     const [photo, setPhoto] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [location, setLocation] = useState<string>("");
+    const [uploadBtn, setUploadBtn] = useState<boolean>(false);
     const { postId } = useParams();
     const navigate = useNavigate();
     // First fetch the previous data based on PostId
@@ -37,6 +39,15 @@ export const EditPost: React.FC = () => {
 
     // First delete the Image stored on cloudinary... and Then upload this...
     const uploadImage = async (file: File) => {
+        // If we are updating the image... please make sure to delete from the cloud...
+        if(photo){
+            var urlImage = photo.split('/');
+            const publicId = urlImage[urlImage?.length-1].split('.')[0];
+            // Delete image with public id...
+            console.log("public id:",publicId);
+           const response =  await axiosInstance.post(`/cloud/image/delete`,{publicId},{withCredentials:true});
+           console.log(response);
+        }
         const formData = new FormData();
         formData.append("file", file);
         formData.append("upload_preset", "ml_default"); // Replace with your Cloudinary preset
@@ -55,7 +66,9 @@ export const EditPost: React.FC = () => {
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setUploadBtn(true);
             const imageUrl = await uploadImage(file);
+            setUploadBtn(false);
             if (imageUrl) {
                 setPhoto(imageUrl); // Set the Cloudinary image URL in state
             }
@@ -79,7 +92,6 @@ export const EditPost: React.FC = () => {
                         name="photo"
                         className="form-control w-50"
                         onChange={handleFileChange}
-                        required
                     />
                 </div>
             </div>
@@ -117,7 +129,7 @@ export const EditPost: React.FC = () => {
             </div>
 
             <div className="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
-                <button type="submit" className="btn btn-primary px-5">Update post</button>
+                <button type="submit" className="btn btn-light px-5" disabled={uploadBtn}>{uploadBtn?"Pic Uploading":"Update post"}</button>
             </div>
         </form>
     )

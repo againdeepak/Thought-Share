@@ -10,6 +10,7 @@ export const CreatePost: React.FC = () => {
   const [description, setDescription] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [uploadBtn, setUploadBtn] = useState<boolean>(false);
   const navigate = useNavigate();
   const context = useContext(AppContext);
   if (!context) {
@@ -25,9 +26,6 @@ export const CreatePost: React.FC = () => {
 
     try {
       const response = await axios.post("https://api.cloudinary.com/v1_1/dxwcmq53m/image/upload", formData);
-      // if(!response.data.url){
-      //   return 
-      // }
       return response.data.url; // Get the image URL from Cloudinary response
     } catch (error) {
       console.error("Error uploading image to Cloudinary:", error);
@@ -39,7 +37,7 @@ export const CreatePost: React.FC = () => {
   const createPostHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!authUser) {
-      toast.error("Login to create a post");
+      toast.error("You are not authenticated");
       navigate('/login');
       return;
     }
@@ -58,8 +56,11 @@ export const CreatePost: React.FC = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setUploadBtn(true);
       const imageUrl = await uploadImage(file);
+      console.log("upload now",imageUrl);
       if (imageUrl) {
+        setUploadBtn(false);
         setPhoto(imageUrl); // Set the Cloudinary image URL in state
       }
     }
@@ -119,7 +120,7 @@ export const CreatePost: React.FC = () => {
             </div>
           </div>
           <div className='d-flex justify-content-center'>
-          <button type="submit" className="btn btn-primary px-5">Post</button>
+          <button type="submit" className="btn btn-light px-5" disabled={uploadBtn}>{uploadBtn?"Pic uploading":"Post"}</button>
           </div>
         </form>
       )}

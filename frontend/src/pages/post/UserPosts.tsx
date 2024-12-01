@@ -5,12 +5,17 @@ import { Post } from './Post';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
+interface postByUser{
+    userName:string;
+    userPic: string;
+}
 interface PostType {
     _id: string;
     photo: string;
     location: string;
-    postBy: string;
-    currUserPic:string;
+    postBy: postByUser;
+    userName:string;
+    userPic:string;
     description: string;
     createdAt: string;
     updatedAt: string;
@@ -31,7 +36,6 @@ export const UserPosts: React.FC = () => {
     useEffect(() => {
         userPosts();
     }, [])
-
     return (
         <div className='text-white scrollable-container'>
             {

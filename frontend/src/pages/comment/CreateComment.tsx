@@ -42,8 +42,7 @@ export const CreateComment: React.FC<PostProps> = ({postId, postBy, commentsOfPo
                 navigate('/login');
             }else{
                 setLoading(true);
-                const response = await postCommentHook(postId, { comment });
-                console.log(response);
+                await postCommentHook(postId, { comment });
                 setComment("");
                 commentsOfPostFun(); // Run this function for fetching data... to show on UI
                 setLoading(false);
@@ -62,7 +61,7 @@ export const CreateComment: React.FC<PostProps> = ({postId, postBy, commentsOfPo
             </div>
             <div className="comment-input-btn">
                 {
-                    loading ? (<i>Loading...</i>) : (<button type="submit">Post </button>)
+                    loading ? (<i>Loading...</i>) : (<button type="submit" >Post </button>)
                 }
             </div>
         </form>

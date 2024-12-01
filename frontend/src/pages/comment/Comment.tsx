@@ -40,7 +40,6 @@ export const Comment: React.FC<CommentProps> = ({ item, commentsOfPostFun }) => 
     const { authUser, currUserId } = context;
     const commentEditHandler = (commentId: string) => {
         setEditStatus(!editStatus);
-        console.log(commentId, "Edit on this")
     }
     const commentDeleteHandler = async (commentId: string) => {
         await axiosInstance.delete(`/user/post/comment/${commentId}/delete`,{withCredentials:true})

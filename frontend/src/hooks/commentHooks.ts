@@ -6,7 +6,6 @@ interface postCommentData{
 export const postCommentHook = async (postId: string, data:postCommentData) =>{
     try{
         const response = await axiosInstance.post(`/user/post/${postId}/comment`,data,{withCredentials:true});
-        console.log("Ohh", response.data);
         return response.data;
     }
     catch(error){

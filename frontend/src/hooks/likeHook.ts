@@ -53,7 +53,7 @@ export const likeStatusHook = async (postId: string) : Promise<any>=>{
     return response.data.likeStatus;
   }catch(error){
     if (axios.isAxiosError(error) && error.response) {
-      console.log(error.response)
+      // console.log(error.response)
       throw error.response.data.message || error.response.data.error;
     } else {
       console.error("An unexpected error occurred:", error);
