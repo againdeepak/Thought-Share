@@ -90,9 +90,6 @@ export const userPosts = async (req: UserPostsRequest, res: Response): Promise<a
         if (!userPosts) {
             return res.status(404).json({ error: "User has no posts" });
         }
-        for (const key in userPosts) {
-            console.log("value at 94",key);
-        }
         // Return the populated posts
         return res.status(200).json({ userPosts });
     } catch (err) {

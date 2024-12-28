@@ -27,11 +27,11 @@ const mongoose_1 = __importStar(require("mongoose"));
 const likeSchema = new mongoose_1.Schema({
     likeStatus: {
         type: Boolean,
+        default: true,
     },
     likeBy: {
-        type: String,
-        required: true,
-        // Curr User
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "userModel",
     }
 }, { timestamps: true });
 const likeModel = mongoose_1.default.model("likeModel", likeSchema);

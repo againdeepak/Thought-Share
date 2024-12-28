@@ -50,7 +50,6 @@ export const userSignUp = async (req: UserSignUpRequest, res: Response): Promise
                 httpOnly: true,
                 maxAge: 60 * 60 * 1000
             })
-            console.log(token);
             return res.status(200).json({ message: "User signup successfully!", response, token });
         }
     } catch (err) {

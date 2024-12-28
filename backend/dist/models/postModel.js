@@ -38,16 +38,21 @@ const postSchema = new mongoose_1.Schema({
         required: true,
     },
     postBy: {
-        type: String,
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "userModel",
         required: true,
     },
     likes: [
-        { type: mongoose_1.default.Types.ObjectId },
-        { ref: "likeModel" }
+        {
+            type: mongoose_1.default.Types.ObjectId,
+            ref: "likeModel"
+        }
     ],
     comments: [
-        { type: mongoose_1.default.Types.ObjectId },
-        { ref: "commentModel" }
+        {
+            type: mongoose_1.default.Types.ObjectId,
+            ref: "commentModel"
+        }
     ],
 }, { timestamps: true }); // Automatically added, updated time and create time...
 const postModel = mongoose_1.default.model("postModel", postSchema);

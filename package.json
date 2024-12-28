@@ -1,0 +1,12 @@
+{
+  "name": "thought-share",
+  "version": "1.0.0",
+  "description": "social media platform",
+  "main": "index.js",
+  "scripts": {
+    "build":"npm start --prefix backend && npm start --prefix frontend && npm run build --prefix frontend ",
+    "start": "npm start --prefix backend && npm start --prefix frontend"
+  },
+  "author": "Deepak Kumar",
+  "license": "ISC"
+}

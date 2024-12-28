@@ -19,10 +19,16 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    userPic: {
+        type: String,
+        default: "https://res.cloudinary.com/dxwcmq53m/image/upload/v1731397366/UploadPic_uhmgsf.png"
+    },
     posts: [
-        { type: mongoose_1.default.Types.ObjectId },
-        { ref: "postModel" },
-    ]
+        {
+            type: mongoose_1.default.Types.ObjectId,
+            ref: "postModel", // Make sure this matches the name of your post model
+        },
+    ],
 }, { timestamps: true });
 // Define the userModel type
 const userModel = mongoose_1.default.model("userModel", userSchema);

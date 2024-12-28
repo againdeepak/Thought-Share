@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userLogin = exports.userSignUp = void 0;
+exports.updateUserProfilePic = exports.userInformation = exports.userLogout = exports.userLogin = exports.userSignUp = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const generateToken_1 = require("../config/generateToken");
@@ -21,19 +21,19 @@ const userSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { userName, email, password } = req.body;
         // check for empty field
         if (!userName || !email || !password) {
-            return res.status(401).json({ message: "Please, fill the required field" });
+            return res.status(401).json({ error: "Please, fill the required field" });
         }
         // check for password must be >= 6 chars
         if (password.length < 6) {
             return res.status(401).json({
-                message: "Password must be at least 6 characters"
+                error: "Password must be at least 6 characters"
             });
         }
         // check for the Email (USER), Already exists...
         const existsUser = yield userModel_1.default.findOne({ email });
         if (existsUser) {
             return res.status(401).json({
-                message: "User already exists"
+                error: "User already exists"
             });
         }
         else {
@@ -52,12 +52,9 @@ const userSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             // Set inside the cookie
             res.cookie('usertoken', token, {
                 httpOnly: true,
-                secure: true,
-                sameSite: true,
                 maxAge: 60 * 60 * 1000
             });
-            console.log(token);
-            return res.status(200).json({ message: "User signup successfully!", response });
+            return res.status(200).json({ message: "User signup successfully!", response, token });
         }
     }
     catch (err) {
@@ -70,18 +67,18 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(401).json({ message: "Please, fill all the required field" });
+            return res.status(401).json({ error: "Please, fill all the required field" });
         }
         // Check if User is register or not...
         const userExists = yield userModel_1.default.findOne({ email });
         if (!userExists) {
-            return res.status(401).json({ message: "No user found" });
+            return res.status(401).json({ error: "No user found" });
         }
         else {
             // Check for the password
             const matchPassword = yield bcryptjs_1.default.compare(password, userExists.password);
             if (!matchPassword) {
-                return res.status(401).json({ message: "Password incorrect" });
+                return res.status(401).json({ error: "Password incorrect" });
             }
         }
         const payload = {
@@ -92,11 +89,9 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // Set inside the cookie
         res.cookie('usertoken', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: true,
             maxAge: 60 * 60 * 1000
         });
-        return res.status(200).json({ message: "User login successfully!", userExists });
+        return res.status(200).json({ message: "User login successfully!", userExists, token });
     }
     catch (err) {
         console.error("Error in userLogin controller", err);
@@ -104,3 +99,36 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.userLogin = userLogin;
+const userLogout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.clearCookie('usertoken', { path: '/' }); // Clears the cookie named 'usertoken'
+        res.status(200).json({ message: "Logout successfully" });
+    }
+    catch (err) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+exports.userLogout = userLogout;
+const userInformation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userInfo = yield userModel_1.default.findById(req.userId);
+        return res.status(200).json({ userInfo });
+    }
+    catch (err) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+exports.userInformation = userInformation;
+const updateUserProfilePic = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id: userId } = req.params;
+        const { photo } = req.body;
+        const response = yield userModel_1.default.findByIdAndUpdate(userId, { userPic: photo }, { new: true });
+        return res.status(200).json({ message: "Updated profile picture", response });
+    }
+    catch (err) {
+        console.log("error in updateUserProfilePic controller");
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+exports.updateUserProfilePic = updateUserProfilePic;
