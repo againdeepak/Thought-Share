@@ -511,7 +511,8 @@ form {
   }
 
   .rightSideUserProfile button {
-    width: 30%;
+    width: 40%;
+    text-align: center;
     font-size: x-small;
     border: 1px solid white;
   }
