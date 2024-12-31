@@ -99,11 +99,8 @@ form {
   width: 100%;
   margin-top: 0.3rem;
 }
-.homeLeft{
-  width:25%;
-}
 .homeRight{
-  width: 70%;
+  width: 75%;
 }
 .user-information {
   height: 25rem;
@@ -450,6 +447,7 @@ form {
   .homeLeft{
     display: none;
   }
+
   .inputBoxSize input{
     width: 70%;
   }
@@ -480,7 +478,6 @@ form {
     width: 4rem;
     text-decoration: none !important;
     display: flex;
-    font-family: cursive;
     padding: 0.3rem 0.4rem 0.3rem 0.4rem;
     justify-content: center;
     background-color: rgb(251, 251, 251);
@@ -555,7 +552,6 @@ form {
 
   .user-information {
     width: 100%;
-    /* display: none; */
     border: 1px solid white;
     background-color: rebeccapurple;
   }
