@@ -62,7 +62,7 @@ export const Comment: React.FC<CommentProps> = ({ item, commentsOfPostFun }) => 
     return (
         <div className="comment-information m-3 p-2">
             <div className='commentOwnerInfo'>
-                <img src={item.commentBy.userPic} alt="deepak_jalwa" />
+                <img src={item.commentBy.userPic} alt={item.commentBy.userName} />
                 <p><strong>{item.commentBy.userName} </strong><small>{checkEditComment ? <i>Edited</i>:""} {timeString}</small></p>
             </div>
 

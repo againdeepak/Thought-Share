@@ -46,7 +46,7 @@ export const Navbar: React.FC = () => {
                         </>
                     ) :
                         (<>
-                            <Link to='/signup' className="text-decoration-none"><li>Sign Up</li></Link>
+                            <Link to='/signup' className="text-decoration-none"><li>Signup</li></Link>
                             <Link to='/login' className="text-decoration-none"><li>Login</li></Link>
                         </>)
                 }

@@ -9,9 +9,9 @@ export const Home: React.FC = () =>{
     }
     const{ authUser} = context;
     return(
-        <div className="home d-flex justify-content-center">
-            {authUser &&<UserProfile/>}
-           <AllPost/>
+        <div className="home userProfileVisible d-flex justify-content-center">
+            <div className="homeLeft">{authUser && <UserProfile/> } </div>
+            <div className="homeRight"><AllPost/></div>
         </div>
     )
 }

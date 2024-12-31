@@ -1,0 +1,39 @@
+.skeleton {
+    background-color: #f4f4f4;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 10px 0;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .skeleton-box {
+    background: #e0e0e0;
+    border-radius: 4px;
+    height: 60px;
+    width: 60px;
+  }
+  
+  .skeleton-line {
+    height: 12px;
+    background: #e0e0e0;
+    margin: 8px 0;
+    border-radius: 4px;
+  }
+  
+  .skeleton-line.short {
+    width: 80px;
+  }
+  
+  .skeleton-line.very-short {
+    width: 40px;
+  }
+  
+  .skeleton-button {
+    height: 30px;
+    width: 60px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    margin: 5px;
+  }
+  

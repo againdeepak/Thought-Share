@@ -35,13 +35,13 @@ export const UserSignUp: React.FC = () => {
 
       <div className="mb-3 row">
         <label htmlFor="userName" className="col-sm-4 col-form-label text-sm-end">User Name:</label>
-        <div className="col-sm-8">
+        <div className="col-sm-8 inputBoxSize">
           <input
             type="text"
             id="userName"
             name="userName"
             placeholder="John Sah"
-            className="form-control w-50"
+            className="form-control"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
             required
@@ -51,13 +51,13 @@ export const UserSignUp: React.FC = () => {
 
       <div className="mb-3 row d-flex justify-content-center">
         <label htmlFor="email" className="col-sm-4 col-form-label text-sm-end">Email:</label>
-        <div className="col-sm-8">
+        <div className="col-sm-8 inputBoxSize">
           <input
             type="email"
             id="email"
             name="email"
             placeholder="xyz@gmail.com"
-            className="form-control w-50"
+            className="form-control"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -67,13 +67,13 @@ export const UserSignUp: React.FC = () => {
 
       <div className="mb-3 row align-items-center">
         <label htmlFor="password" className="col-sm-4 col-form-label text-sm-end">Password:</label>
-        <div className="col-sm-8">
+        <div className="col-sm-8 inputBoxSize">
           <input
             type="password"
             id="password"
             name="password"
             placeholder="Enter a strong password"
-            className="form-control w-50"
+            className="form-control"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -82,7 +82,7 @@ export const UserSignUp: React.FC = () => {
       </div>
 
       <div className="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
-        <button type="submit" className="btn btn-light ">Sign up</button>
+        <button type="submit" className="btn btn-light ">SignUp</button>
         <Link className="haveAccount" to='/login'>Already Have an account</Link>
       </div>
     </form>

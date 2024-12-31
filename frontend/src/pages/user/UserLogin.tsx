@@ -34,13 +34,13 @@ export const UserLogin: React.FC = () => {
         <h3 className="mb-4 text-center">User Login</h3>     
         <div className="mb-3 row d-flex justify-content-center">
           <label htmlFor="email" className="col-sm-4 col-form-label text-sm-end">Email:</label>
-          <div className="col-sm-8">
+          <div className="col-sm-8 inputBoxSize">
             <input
               type="email"
               id="email"
               name="email"
               placeholder="xyz@gmail.com"
-              className="form-control w-50"
+              className="form-control"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -50,13 +50,13 @@ export const UserLogin: React.FC = () => {
       
         <div className="mb-3 row align-items-center">
           <label htmlFor="password" className="col-sm-4 col-form-label text-sm-end">Password:</label>
-          <div className="col-sm-8">
+          <div className="col-sm-8 inputBoxSize">
             <input
               type="password"
               id="password"
               name="password"
               placeholder="Enter a strong password"
-              className="form-control w-50"
+              className="form-control"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

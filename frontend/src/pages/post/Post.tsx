@@ -142,7 +142,8 @@ export const Post: React.FC<PostProps> = ({ item, userPost }) => {
     }
   }
 
-  if (authUser) { // This status only showed liked as red... when user is loggedin...
+  if (authUser) { 
+    // This status only showed liked as red... when user is loggedin...
     likeStatusHandler();
   }
 
@@ -181,7 +182,7 @@ export const Post: React.FC<PostProps> = ({ item, userPost }) => {
             <button className='btn btn-danger' onClick={() => deletePost(item._id)}>Delete</button>
           </div>
         ) : (
-          <button className='btn btn-primary'>Follow</button>
+          <button className=' btn btn-primary'>Follow</button>
         )
 
         }
