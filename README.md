@@ -1,4 +1,4 @@
-# `Thought-Share` | [Deployed Link](thought-share-lpks.onrender.com) | [Video Link](https://drive.google.com/file/d/14DQES-CI7IobLaCLEoa6Ksn8jAUv6liE/view?usp=sharing)
+# `Thought-Share` | [Deployed Link](https://thought-share-lpks.onrender.com) | [Video Link](https://drive.google.com/file/d/14DQES-CI7IobLaCLEoa6Ksn8jAUv6liE/view?usp=sharing)
 
 ## Overview
 **Thought-Share** is a full-stack social media web application designed to provide a platform where users can create, share, and interact with posts. Users can like and comment on posts, upload images, and manage content seamlessly. This project demonstrates a strong grasp of modern web development technologies and practices, showcasing robust authentication and efficient media handling.
